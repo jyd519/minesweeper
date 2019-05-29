@@ -5,12 +5,14 @@ import { isGameOver, revealTile } from 'src/game';
 
 @Component({
   selector: 'app-minesweeper',
+  // <div class="board">
+  //   <app-row *ngFor="let row of rows" [row]="row" (tileClick)="handleTileClick($event)"></app-row>
+  // </div>
   template: `
   <div class="board">
-    <app-row *ngFor="let row of rows" [row]="row" (tileClick)="handleTileClick($event)"></app-row>
+    <app-tile *ngFor="let tile of getTiles()" [tile]="tile" (tileClick)="handleTileClick($event)"></app-tile>
   </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
 }
 )
 export class MinesweeperComponent implements OnChanges {
@@ -28,12 +30,15 @@ export class MinesweeperComponent implements OnChanges {
       this.updateGame();
     }
   }
-
+  getTiles() {
+    return this.game ? this.game.get('tiles') : [];
+  }
   updateGame(updateHistory = true) {
-    this.rows = partition(this.game.get('cols'), this.game.get('tiles'));
-    if (updateHistory) {
-      this.history = this.history.push(this.game);
-    }
+    // this.rows = partition(this.game.get('cols'), this.game.get('tiles'));
+    // if (updateHistory) {
+    //   this.history = this.history.push(this.game);
+    // }
+    this.history = this.history.push(this.game);
   }
 
   handleTileClick(tile) {
@@ -60,7 +65,7 @@ export class MinesweeperComponent implements OnChanges {
 
       // Don't update the history so we don't end up with
       // the same game twice in the end of the list
-      this.updateGame(false);
+      // this.updateGame(false);
     }
   }
 

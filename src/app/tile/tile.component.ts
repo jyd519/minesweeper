@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-tile',
   template: `
-  <div class="tile" [class.mine]="tile.get('isMine')">
+  <div class="tile" [class.mine]="tile.get('isMine')"  (click)="handleTileClick(tile)">
     <div class="lid" *ngIf="!tile.get('isRevealed')"></div>
     <div *ngIf="tile.get('isRevealed') && !tile.get('isMine')">
       {{ tile.get('threatCount') > 0 ? tile.get('threatCount') : '' }}
@@ -13,7 +13,7 @@ import { Component, OnInit, Input, OnChanges, ChangeDetectionStrategy } from '@a
 })
 export class TileComponent implements OnInit, OnChanges {
   @Input() tile: any;
-
+  @Output() tileClick = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
@@ -23,4 +23,7 @@ export class TileComponent implements OnInit, OnChanges {
     console.log('Tile', this.tile);
   }
 
+  handleTileClick(tile) {
+    this.tileClick.next(tile);
+  }
 }
